@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import TrajectoryChart from "./charts/TrajectoryChart";
 import EnergyChart from "./charts/EnergyChart";
 import DownloadCards from "./DownloadCards";
-import Latex from "react-latex-next";
+import Latex from "./Latex";
 
 export default function Dashboard() {
   const [metadata, setMetadata] = useState(null);

@@ -1,6 +1,6 @@
 import { Terminal, Zap, Layers, Activity } from "lucide-react";
 import CodeDisplay from "./CodeDisplay";
-import Latex from "react-latex-next";
+import Latex from "./Latex";
 
 export default function AutomationSection() {
   return (

@@ -1,5 +1,5 @@
 import { Lightbulb, Beaker, Cpu, Atom } from "lucide-react";
-import Latex from "react-latex-next";
+import Latex from "./Latex";
 
 export default function NextStepsSection() {
   return (
