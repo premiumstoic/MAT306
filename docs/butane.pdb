@@ -1,0 +1,16 @@
+REMARK original generated coordinate pdb file
+ATOM      1  H11 BUTAX   1      -5.310   1.876  -0.017  1.00  0.00      O1   H
+ATOM      2  H12 BUTAX   1      -4.345   0.634  -0.901  1.00  0.00      O1   H
+ATOM      3  H13 BUTAX   1      -4.357   0.655   0.910  1.00  0.00      O1   H
+ATOM      4  C1  BUTAX   1      -4.369   1.288  -0.003  1.00  0.00      O1   C
+ATOM      5  H21 BUTAX   1      -3.233   2.892   0.889  1.00  0.00      O1   H
+ATOM      6  H22 BUTAX   1      -3.221   2.871  -0.918  1.00  0.00      O1   H
+ATOM      7  C2  BUTAX   1      -3.173   2.236  -0.007  1.00  0.00      O1   C
+ATOM      8  H31 BUTAX   1      -1.792   0.803  -0.884  1.00  0.00      O1   H
+ATOM      9  H32 BUTAX   1      -1.804   0.824   0.923  1.00  0.00      O1   H
+ATOM     10  C3  BUTAX   1      -1.852   1.459   0.011  1.00  0.00      O1   C
+ATOM     11  H41 BUTAX   1      -0.667   3.040  -0.905  1.00  0.00      O1   H
+ATOM     12  H42 BUTAX   1       0.286   1.819   0.021  1.00  0.00      O1   H
+ATOM     13  H43 BUTAX   1      -0.679   3.061   0.906  1.00  0.00      O1   H
+ATOM     14  C4  BUTAX   1      -0.656   2.407   0.008  1.00  0.00      O1   C
+END

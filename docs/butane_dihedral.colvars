@@ -1,0 +1,13 @@
+colvarsTrajFrequency 1000
+colvarsRestartFrequency 10000
+
+colvar {
+  name phi
+
+  dihedral {
+    group1 { atomNumbers 4 }
+    group2 { atomNumbers 7 }
+    group3 { atomNumbers 10 }
+    group4 { atomNumbers 14 }
+  }
+}

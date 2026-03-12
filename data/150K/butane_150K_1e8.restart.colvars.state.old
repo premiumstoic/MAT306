@@ -1,0 +1,11 @@
+configuration {
+  step     99990000
+  dt 1.000000e+00
+  version 2024-06-04
+}
+
+colvar {
+  name phi
+  x      -171.05245877867
+}
+
