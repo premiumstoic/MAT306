@@ -99,8 +99,8 @@ while (($pendingJobs.Count -gt 0) -or ($runningJobs.Count -gt 0)) {
         </a>
       </div>
 
-      <div className="bg-black/80 border border-white/10 rounded-xl overflow-hidden">
-        <div className="flex bg-white/5 px-4 py-2 border-b border-white/10 text-xs font-mono text-muted-foreground">
+      <div className="bg-slate-900 dark:bg-black/80 border border-black/10 dark:border-white/10 rounded-xl overflow-hidden">
+        <div className="flex bg-white/5 px-4 py-2 border-b border-black/10 dark:border-white/10 text-xs font-mono text-muted-foreground">
           <div className="flex gap-1.5 items-center mr-4">
             <div className="w-2.5 h-2.5 rounded-full bg-rose-500/80"></div>
             <div className="w-2.5 h-2.5 rounded-full bg-amber-500/80"></div>
@@ -108,7 +108,7 @@ while (($pendingJobs.Count -gt 0) -or ($runningJobs.Count -gt 0)) {
           </div>
           PowerShell script
         </div>
-        <pre className="p-4 text-xs md:text-sm font-mono text-emerald-100/90 overflow-x-auto leading-relaxed">
+        <pre className="p-4 text-xs md:text-sm font-mono text-emerald-300 dark:text-emerald-100/90 overflow-x-auto leading-relaxed">
           <code>{codeString}</code>
         </pre>
       </div>

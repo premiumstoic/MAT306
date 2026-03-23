@@ -70,7 +70,7 @@ export default function PageTOC() {
             <div
               className="w-2.5 h-2.5 rounded-full border-2 transition-all duration-300 flex-shrink-0"
               style={{
-                borderColor: isActive ? "#10b981" : "rgba(255,255,255,0.25)",
+                borderColor: isActive ? "#10b981" : "rgba(100,116,139,0.5)",
                 background: isActive ? "#10b981" : "transparent",
                 boxShadow: isActive ? "0 0 8px #10b98180" : "none",
                 transform: isActive ? "scale(1.3)" : "scale(1)",
@@ -78,7 +78,7 @@ export default function PageTOC() {
             />
             {/* Tooltip label — appears on hover */}
             <span
-              className="absolute left-5 whitespace-nowrap text-xs px-2 py-1 rounded-lg bg-black/80 backdrop-blur text-white border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
+              className="absolute left-5 whitespace-nowrap text-xs px-2 py-1 rounded-lg bg-black/80 backdrop-blur text-white border border-white/10 dark:border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
               style={{ color: isActive ? "#10b981" : "#94a3b8" }}
             >
               {label}

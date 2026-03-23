@@ -52,10 +52,10 @@ export default function DownloadCards({ temp }) {
             key={idx}
             href={file.url}
             download
-            className="group flex flex-col justify-between p-4 rounded-xl border border-white/5 bg-white/5 hover:bg-white/10 transition-all hover:border-white/20 active:scale-95"
+            className="group flex flex-col justify-between p-4 rounded-xl border border-black/5 dark:border-white/5 bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 transition-all hover:border-black/20 dark:hover:border-white/20 active:scale-95"
           >
             <div className="flex items-start gap-3 mb-3">
-              <div className="p-2 rounded-lg bg-black/30 w-fit">
+              <div className="p-2 rounded-lg bg-black/10 dark:bg-black/30 w-fit">
                 {file.icon}
               </div>
               <div className="overflow-hidden">
@@ -68,7 +68,7 @@ export default function DownloadCards({ temp }) {
               </div>
             </div>
             
-            <div className="flex items-center justify-between mt-auto pt-3 border-t border-white/5">
+            <div className="flex items-center justify-between mt-auto pt-3 border-t border-black/5 dark:border-white/5">
               <span className="text-xs font-mono text-muted-foreground">{file.size}</span>
               <span className="text-xs font-semibold text-primary group-hover:underline flex items-center gap-1">
                 Download <Download className="w-3 h-3 group-hover:translate-y-0.5 transition-transform" />

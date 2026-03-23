@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import { CONFORMATIONS } from "./MolecularViewer";
+import { useTheme } from "@/components/ThemeProvider";
 
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
 
@@ -33,6 +34,8 @@ const STATE_DESCRIPTORS = {
 };
 
 export default function ReactionCoordinateChart({ onSelect }) {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const xs = STEPS.map((s) => s.x);
   const ys = STEPS.map((s) => s.y);
   const labels = STEPS.map((s) => s.name);
@@ -102,7 +105,7 @@ export default function ReactionCoordinateChart({ onSelect }) {
     <div className="w-full flex flex-col gap-3">
       <div className="flex gap-4 items-stretch">
         {/* Chart */}
-        <div className="flex-1 min-h-[260px] rounded-2xl bg-black/40 relative">
+        <div className="flex-1 min-h-[260px] rounded-2xl dark:bg-black/40 relative">
           <Plot
             data={[
               {
@@ -143,14 +146,14 @@ export default function ReactionCoordinateChart({ onSelect }) {
                 zeroline: false,
                 showticklabels: false,
                 title: "Reaction Coordinate →",
-                titlefont: { color: "#94a3b8", size: 11 },
+                titlefont: { color: isDark ? "#94a3b8" : "#64748b", size: 11 },
               },
               yaxis: {
                 title: "ΔG (kcal/mol)",
-                titlefont: { color: "#94a3b8", size: 11 },
-                tickfont: { color: "#64748b", size: 9 },
-                gridcolor: "rgba(255,255,255,0.05)",
-                zerolinecolor: "rgba(255,255,255,0.1)",
+                titlefont: { color: isDark ? "#94a3b8" : "#64748b", size: 11 },
+                tickfont: { color: isDark ? "#64748b" : "#94a3b8", size: 9 },
+                gridcolor: isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.06)",
+                zerolinecolor: isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)",
                 range: [-1, 13],
               },
               font: { family: "Inter, system-ui, sans-serif" },
@@ -163,7 +166,7 @@ export default function ReactionCoordinateChart({ onSelect }) {
 
           {/* Play progress bar */}
           {isPlaying && playIndex !== null && (
-            <div className="absolute bottom-1 left-4 right-4 h-0.5 bg-white/10 rounded-full overflow-hidden">
+            <div className="absolute bottom-1 left-4 right-4 h-0.5 bg-black/10 dark:bg-white/10 rounded-full overflow-hidden">
               <div
                 className="h-full bg-emerald-400 rounded-full transition-all duration-1000"
                 style={{ width: `${((playIndex + 1) / STEPS.length) * 100}%` }}
@@ -176,7 +179,7 @@ export default function ReactionCoordinateChart({ onSelect }) {
         <div className="w-40 flex-shrink-0 flex flex-col">
           {displayState ? (
             <div
-              className="rounded-2xl border bg-black/60 backdrop-blur-xl p-4 flex flex-col items-center justify-center gap-3 h-full transition-all duration-300"
+              className="rounded-2xl border bg-white/80 dark:bg-black/60 backdrop-blur-xl p-4 flex flex-col items-center justify-center gap-3 h-full transition-all duration-300"
               style={{ borderColor: CONFORMATIONS[displayState.key].color + "50" }}
             >
               <div
@@ -192,21 +195,21 @@ export default function ReactionCoordinateChart({ onSelect }) {
                 <div className="text-[10px] text-slate-500 uppercase tracking-wider">
                   {STATE_DESCRIPTORS[displayState.key]}
                 </div>
-                <div className="font-mono text-xs text-slate-400 mt-1 bg-white/5 px-2 py-1 rounded-lg">
+                <div className="font-mono text-xs text-slate-500 mt-1 bg-black/5 dark:bg-white/5 px-2 py-1 rounded-lg">
                   ΔG = <span style={{ color: CONFORMATIONS[displayState.key].color }}>{displayState.y}</span> kcal/mol
                 </div>
               </div>
               {!isPlaying && (
                 <button
                   onClick={() => { setSelected(null); onSelect?.("chair"); }}
-                  className="text-[10px] text-slate-500 hover:text-white transition-colors px-2 py-0.5 rounded border border-white/10 hover:border-white/30"
+                  className="text-[10px] text-slate-500 hover:text-foreground transition-colors px-2 py-0.5 rounded border border-black/10 dark:border-white/10 hover:border-black/30 dark:hover:border-white/30"
                 >
                   ✕ close
                 </button>
               )}
             </div>
           ) : (
-            <div className="rounded-2xl border border-dashed border-white/10 bg-white/[0.015] h-full flex items-center justify-center p-4">
+            <div className="rounded-2xl border border-dashed border-black/10 dark:border-white/10 bg-black/[0.015] dark:bg-white/[0.015] h-full flex items-center justify-center p-4">
               <p className="text-[11px] text-slate-600 text-center leading-tight">
                 Select a state<br />below or press<br />▶ Auto-Play
               </p>
@@ -235,15 +238,15 @@ export default function ReactionCoordinateChart({ onSelect }) {
         )}
 
         {/* Speed selector */}
-        <div className="flex bg-white/5 rounded-full border border-white/10 overflow-hidden">
+        <div className="flex bg-black/5 dark:bg-white/5 rounded-full border border-black/10 dark:border-white/10 overflow-hidden">
           {["slow", "normal", "fast"].map((s) => (
             <button
               key={s}
               onClick={() => setSpeed(s)}
               className="px-2.5 py-1 text-[10px] font-semibold capitalize transition-all duration-150"
               style={{
-                background: speed === s ? "rgba(255,255,255,0.12)" : "transparent",
-                color:      speed === s ? "white" : "#475569",
+                background: speed === s ? (isDark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.08)") : "transparent",
+                color:      speed === s ? (isDark ? "white" : "#0f172a") : "#475569",
               }}
             >
               {s === "slow" ? "0.5×" : s === "normal" ? "1×" : "2×"}
@@ -263,11 +266,11 @@ export default function ReactionCoordinateChart({ onSelect }) {
               background:
                 !isPlaying && selected && selected.key === state.key
                   ? CONFORMATIONS[state.key].color + "25"
-                  : "rgba(255,255,255,0.03)",
+                  : (isDark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.03)"),
               borderColor:
                 !isPlaying && selected && selected.key === state.key
                   ? CONFORMATIONS[state.key].color + "80"
-                  : "rgba(255,255,255,0.1)",
+                  : (isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"),
               color:
                 !isPlaying && selected && selected.key === state.key
                   ? CONFORMATIONS[state.key].color

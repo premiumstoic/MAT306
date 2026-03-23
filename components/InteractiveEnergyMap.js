@@ -3,6 +3,7 @@
 import { useEffect, useState, useMemo } from "react";
 import dynamic from "next/dynamic";
 import { CONFORMATIONS } from "./MolecularViewer";
+import { useTheme } from "@/components/ThemeProvider";
 
 // Dynamically import Plotly to avoid SSR issues
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
@@ -34,6 +35,8 @@ function findClosestState(phi1, phi2) {
 export default function InteractiveEnergyMap({ activeConformation, onSelect, dataUrl = "/homework1/fes_3d_data_100ns.json" }) {
   const [fesData, setFesData] = useState(null);
   const [viewMode, setViewMode] = useState("3d");
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   useEffect(() => {
     fetch(dataUrl)
@@ -42,10 +45,15 @@ export default function InteractiveEnergyMap({ activeConformation, onSelect, dat
       .catch(console.error);
   }, [dataUrl]);
 
+  const axisColor = isDark ? "#94a3b8" : "#64748b";
+  const tickColor = isDark ? "#64748b" : "#94a3b8";
+  const gridColor = isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.06)";
+  const zeroColor = isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)";
+
   // Build marker data for the known states
   const markers = useMemo(() => {
     if (!fesData) return null;
-    
+
     const xs = [], ys = [], zs = [], texts = [], colors = [];
     const uniqueStates = [
       { key: "chair", phi1: -50, phi2: 50 },
@@ -55,15 +63,14 @@ export default function InteractiveEnergyMap({ activeConformation, onSelect, dat
     ];
 
     for (const s of uniqueStates) {
-      // Find the closest bin to get the z-value
       const xi = fesData.x.reduce((best, v, i) => Math.abs(v - s.phi1) < Math.abs(fesData.x[best] - s.phi1) ? i : best, 0);
       const yi = fesData.y.reduce((best, v, i) => Math.abs(v - s.phi2) < Math.abs(fesData.y[best] - s.phi2) ? i : best, 0);
       const z = fesData.z[xi][yi];
-      
+
       const conf = CONFORMATIONS[s.key];
       xs.push(s.phi1);
       ys.push(s.phi2);
-      zs.push(z + 0.5); // slightly above surface
+      zs.push(z + 0.5);
       texts.push(`${conf.label}<br>${conf.energy}`);
       colors.push(conf.color);
     }
@@ -97,10 +104,10 @@ export default function InteractiveEnergyMap({ activeConformation, onSelect, dat
   ];
 
   const colorbar = {
-    title: { text: "ΔG (kcal/mol)", font: { color: "#e0e1dd", size: 11 } },
-    tickfont: { color: "#94a3b8", size: 10 },
+    title: { text: "ΔG (kcal/mol)", font: { color: axisColor, size: 11 } },
+    tickfont: { color: tickColor, size: 10 },
     bgcolor: "rgba(0,0,0,0)",
-    bordercolor: "rgba(255,255,255,0.1)",
+    bordercolor: isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)",
     len: 0.6,
     thickness: 15,
   };
@@ -122,7 +129,7 @@ export default function InteractiveEnergyMap({ activeConformation, onSelect, dat
           text: ["Chair", "Twist-Boat", "Boat", "Half-Chair"],
           textposition: "top center",
           textfont: { color: markers.colors, size: 11, family: "Inter, sans-serif" },
-          marker: { size: 8, color: markers.colors, symbol: "diamond", line: { color: "white", width: 1 } },
+          marker: { size: 8, color: markers.colors, symbol: "diamond", line: { color: isDark ? "white" : "#0f172a", width: 1 } },
           hovertext: markers.texts,
           hoverinfo: "text",
         }] : []),
@@ -134,7 +141,7 @@ export default function InteractiveEnergyMap({ activeConformation, onSelect, dat
           colorscale, colorbar,
           contours: {
             showlabels: true,
-            labelfont: { size: 9, color: "rgba(255,255,255,0.7)" },
+            labelfont: { size: 9, color: isDark ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.6)" },
           },
           line: { smoothing: 0.85 },
           hovertemplate: "φ₁: %{x:.1f}°<br>φ₂: %{y:.1f}°<br>ΔG: %{z:.2f} kcal/mol<extra></extra>",
@@ -146,7 +153,7 @@ export default function InteractiveEnergyMap({ activeConformation, onSelect, dat
           text: ["Chair", "Twist-Boat", "Boat", "Half-Chair"],
           textposition: "top center",
           textfont: { color: markers.colors, size: 11, family: "Inter, sans-serif" },
-          marker: { size: 10, color: markers.colors, symbol: "diamond", line: { color: "white", width: 1.5 } },
+          marker: { size: 10, color: markers.colors, symbol: "diamond", line: { color: isDark ? "white" : "#0f172a", width: 1.5 } },
           hovertext: markers.texts,
           hoverinfo: "text",
         }] : []),
@@ -159,9 +166,9 @@ export default function InteractiveEnergyMap({ activeConformation, onSelect, dat
         plot_bgcolor: "rgba(0,0,0,0)",
         margin: { l: 0, r: 0, t: 0, b: 0 },
         scene: {
-          xaxis: { title: { text: "φ₁ (°)", font: { color: "#94a3b8", size: 12 } }, tickfont: { color: "#64748b", size: 10 }, gridcolor: "rgba(255,255,255,0.05)", zerolinecolor: "rgba(255,255,255,0.1)", backgroundcolor: "rgba(0,0,0,0)" },
-          yaxis: { title: { text: "φ₂ (°)", font: { color: "#94a3b8", size: 12 } }, tickfont: { color: "#64748b", size: 10 }, gridcolor: "rgba(255,255,255,0.05)", zerolinecolor: "rgba(255,255,255,0.1)", backgroundcolor: "rgba(0,0,0,0)" },
-          zaxis: { title: { text: "ΔG (kcal/mol)", font: { color: "#94a3b8", size: 12 } }, tickfont: { color: "#64748b", size: 10 }, gridcolor: "rgba(255,255,255,0.05)", zerolinecolor: "rgba(255,255,255,0.1)", backgroundcolor: "rgba(0,0,0,0)" },
+          xaxis: { title: { text: "φ₁ (°)", font: { color: axisColor, size: 12 } }, tickfont: { color: tickColor, size: 10 }, gridcolor: gridColor, zerolinecolor: zeroColor, backgroundcolor: "rgba(0,0,0,0)" },
+          yaxis: { title: { text: "φ₂ (°)", font: { color: axisColor, size: 12 } }, tickfont: { color: tickColor, size: 10 }, gridcolor: gridColor, zerolinecolor: zeroColor, backgroundcolor: "rgba(0,0,0,0)" },
+          zaxis: { title: { text: "ΔG (kcal/mol)", font: { color: axisColor, size: 12 } }, tickfont: { color: tickColor, size: 10 }, gridcolor: gridColor, zerolinecolor: zeroColor, backgroundcolor: "rgba(0,0,0,0)" },
           bgcolor: "rgba(0,0,0,0)",
           camera: { eye: { x: 1.5, y: -1.5, z: 1.2 } },
         },
@@ -173,8 +180,8 @@ export default function InteractiveEnergyMap({ activeConformation, onSelect, dat
         paper_bgcolor: "rgba(0,0,0,0)",
         plot_bgcolor: "rgba(0,0,0,0)",
         margin: { l: 52, r: 20, t: 10, b: 48 },
-        xaxis: { title: { text: "φ₁ (°)", font: { color: "#94a3b8", size: 12 } }, tickfont: { color: "#64748b", size: 10 }, gridcolor: "rgba(255,255,255,0.06)", zerolinecolor: "rgba(255,255,255,0.15)" },
-        yaxis: { title: { text: "φ₂ (°)", font: { color: "#94a3b8", size: 12 } }, tickfont: { color: "#64748b", size: 10 }, gridcolor: "rgba(255,255,255,0.06)", zerolinecolor: "rgba(255,255,255,0.15)" },
+        xaxis: { title: { text: "φ₁ (°)", font: { color: axisColor, size: 12 } }, tickfont: { color: tickColor, size: 10 }, gridcolor: gridColor, zerolinecolor: zeroColor },
+        yaxis: { title: { text: "φ₂ (°)", font: { color: axisColor, size: 12 } }, tickfont: { color: tickColor, size: 10 }, gridcolor: gridColor, zerolinecolor: zeroColor },
         font: { family: "Inter, system-ui, sans-serif" },
         showlegend: false,
         uirevision: "2d",
@@ -182,25 +189,25 @@ export default function InteractiveEnergyMap({ activeConformation, onSelect, dat
 
   return (
     <div className="relative w-full h-full flex flex-col">
-      <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 gap-3">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-black/10 dark:border-white/10 gap-3">
         <span className="font-bold text-lg">Free Energy Surface</span>
         <div className="flex items-center gap-3">
-          <div className="flex bg-white/5 rounded-lg border border-white/10 overflow-hidden">
+          <div className="flex bg-black/5 dark:bg-white/5 rounded-lg border border-black/10 dark:border-white/10 overflow-hidden">
             {[{ key: "3d", label: "3D" }, { key: "2d", label: "2D" }].map(({ key, label }) => (
               <button
                 key={key}
                 onClick={() => setViewMode(key)}
                 className="px-3 py-0.5 text-[10px] font-semibold transition-all duration-150"
                 style={{
-                  background: viewMode === key ? "rgba(255,255,255,0.15)" : "transparent",
-                  color:      viewMode === key ? "white" : "#475569",
+                  background: viewMode === key ? (isDark ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.08)") : "transparent",
+                  color:      viewMode === key ? (isDark ? "white" : "#0f172a") : "#475569",
                 }}
               >
                 {label}
               </button>
             ))}
           </div>
-          <span className="text-xs bg-white/5 px-3 py-1.5 rounded-lg font-mono" style={{ color: activeConf?.color }}>
+          <span className="text-xs bg-black/5 dark:bg-white/5 px-3 py-1.5 rounded-lg font-mono" style={{ color: activeConf?.color }}>
             {activeConf?.label}
           </span>
         </div>

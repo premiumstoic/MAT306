@@ -126,7 +126,7 @@ export default function MolecularViewer({ activeConformation = "chair" }) {
   return (
     <div className="relative h-full w-full flex flex-col">
       {/* Info bar */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 gap-3">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-black/10 dark:border-white/10 gap-3">
         <div className="flex items-center gap-3 min-w-0">
           <div
             className="h-3 w-3 rounded-full flex-shrink-0 animate-pulse"
@@ -137,11 +137,11 @@ export default function MolecularViewer({ activeConformation = "chair" }) {
           </span>
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
-          <span className="text-xs text-slate-500 font-mono bg-white/5 px-2 py-1 rounded-lg">
-            φ₁&nbsp;<span className="text-slate-300">{conf?.phi.phi1 > 0 ? "+" : ""}{conf?.phi.phi1}°</span>
-            &nbsp;φ₂&nbsp;<span className="text-slate-300">{conf?.phi.phi2 > 0 ? "+" : ""}{conf?.phi.phi2}°</span>
+          <span className="text-xs text-slate-500 font-mono bg-black/5 dark:bg-white/5 px-2 py-1 rounded-lg">
+            φ₁&nbsp;<span className="text-slate-600 dark:text-slate-300">{conf?.phi.phi1 > 0 ? "+" : ""}{conf?.phi.phi1}°</span>
+            &nbsp;φ₂&nbsp;<span className="text-slate-600 dark:text-slate-300">{conf?.phi.phi2 > 0 ? "+" : ""}{conf?.phi.phi2}°</span>
           </span>
-          <span className="text-xs text-muted-foreground bg-white/5 px-3 py-1.5 rounded-lg font-mono">
+          <span className="text-xs text-muted-foreground bg-black/5 dark:bg-white/5 px-3 py-1.5 rounded-lg font-mono">
             {conf?.energy}
           </span>
         </div>
@@ -161,7 +161,7 @@ export default function MolecularViewer({ activeConformation = "chair" }) {
       </div>
 
       {/* Bottom bar: style controls + spin toggle + hint */}
-      <div className="flex items-center justify-between px-3 py-2 border-t border-white/5 gap-2">
+      <div className="flex items-center justify-between px-3 py-2 border-t border-black/5 dark:border-white/5 gap-2">
         {/* Style switcher */}
         <div className="flex gap-1">
           {STYLES.map((s) => (
@@ -171,9 +171,9 @@ export default function MolecularViewer({ activeConformation = "chair" }) {
               onClick={() => setViewStyle(s.key)}
               className="px-2 py-0.5 rounded text-[10px] font-medium transition-all duration-150"
               style={{
-                background: viewStyle === s.key ? (conf?.color + "25") : "rgba(255,255,255,0.04)",
+                background: viewStyle === s.key ? (conf?.color + "25") : "rgba(128,128,128,0.06)",
                 color:      viewStyle === s.key ? conf?.color           : "#475569",
-                border:     viewStyle === s.key ? `1px solid ${conf?.color}50` : "1px solid rgba(255,255,255,0.06)",
+                border:     viewStyle === s.key ? `1px solid ${conf?.color}50` : "1px solid rgba(128,128,128,0.15)",
               }}
             >
               {s.label}
@@ -186,9 +186,9 @@ export default function MolecularViewer({ activeConformation = "chair" }) {
             title={spinning ? "Pause rotation" : "Resume rotation"}
             className="px-2 py-0.5 rounded text-[10px] font-medium transition-all duration-150"
             style={{
-              background: spinning ? (conf?.color + "15") : "rgba(255,255,255,0.04)",
+              background: spinning ? (conf?.color + "15") : "rgba(128,128,128,0.06)",
               color:      spinning ? conf?.color           : "#475569",
-              border:     spinning ? `1px solid ${conf?.color}40` : "1px solid rgba(255,255,255,0.06)",
+              border:     spinning ? `1px solid ${conf?.color}40` : "1px solid rgba(128,128,128,0.15)",
             }}
           >
             {spinning ? "⏸ Spin" : "▶ Spin"}

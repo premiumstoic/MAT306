@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useMemo } from "react";
 import dynamic from "next/dynamic";
+import { useTheme } from "@/components/ThemeProvider";
 
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
 
@@ -33,6 +34,8 @@ export default function SurfacePlot({ dataUrl, title, zTitle, colorscaleKey = "e
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [viewMode, setViewMode] = useState("3d");
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   useEffect(() => {
     fetch(dataUrl)
@@ -41,11 +44,16 @@ export default function SurfacePlot({ dataUrl, title, zTitle, colorscaleKey = "e
       .catch((e) => setError(e.message));
   }, [dataUrl]);
 
+  const axisColor = isDark ? "#94a3b8" : "#64748b";
+  const tickColor = isDark ? "#64748b" : "#94a3b8";
+  const gridColor = isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.06)";
+  const zeroColor = isDark ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.1)";
+
   const colorbarConfig = {
-    title: { text: zTitle, font: { color: "#e0e1dd", size: 11 } },
-    tickfont: { color: "#94a3b8", size: 10 },
+    title: { text: zTitle, font: { color: axisColor, size: 11 } },
+    tickfont: { color: tickColor, size: 10 },
     bgcolor: "rgba(0,0,0,0)",
-    bordercolor: "rgba(255,255,255,0.1)",
+    bordercolor: isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)",
     len: 0.7,
     thickness: 14,
   };
@@ -69,12 +77,12 @@ export default function SurfacePlot({ dataUrl, title, zTitle, colorscaleKey = "e
       colorbar: colorbarConfig,
       contours: {
         showlabels: true,
-        labelfont: { size: 9, color: "rgba(255,255,255,0.7)" },
+        labelfont: { size: 9, color: isDark ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.6)" },
       },
       hovertemplate: `φ₁: %{x:.1f}°<br>φ₂: %{y:.1f}°<br>${zTitle}: %{z:.4f}<extra></extra>`,
       line: { smoothing: 0.85 },
     }];
-  }, [data, viewMode, colorscaleKey, zTitle]);
+  }, [data, viewMode, colorscaleKey, zTitle, isDark]);
 
   const plotLayout = useMemo(() => {
     const base = {
@@ -88,9 +96,9 @@ export default function SurfacePlot({ dataUrl, title, zTitle, colorscaleKey = "e
         ...base,
         margin: { l: 0, r: 0, t: 0, b: 0 },
         scene: {
-          xaxis: { title: { text: "φ₁ (°)", font: { color: "#94a3b8", size: 11 } }, tickfont: { color: "#64748b", size: 9 }, gridcolor: "rgba(255,255,255,0.05)", backgroundcolor: "rgba(0,0,0,0)" },
-          yaxis: { title: { text: "φ₂ (°)", font: { color: "#94a3b8", size: 11 } }, tickfont: { color: "#64748b", size: 9 }, gridcolor: "rgba(255,255,255,0.05)", backgroundcolor: "rgba(0,0,0,0)" },
-          zaxis: { title: { text: zTitle,    font: { color: "#94a3b8", size: 11 } }, tickfont: { color: "#64748b", size: 9 }, gridcolor: "rgba(255,255,255,0.05)", backgroundcolor: "rgba(0,0,0,0)" },
+          xaxis: { title: { text: "φ₁ (°)", font: { color: axisColor, size: 11 } }, tickfont: { color: tickColor, size: 9 }, gridcolor: gridColor, backgroundcolor: "rgba(0,0,0,0)" },
+          yaxis: { title: { text: "φ₂ (°)", font: { color: axisColor, size: 11 } }, tickfont: { color: tickColor, size: 9 }, gridcolor: gridColor, backgroundcolor: "rgba(0,0,0,0)" },
+          zaxis: { title: { text: zTitle,    font: { color: axisColor, size: 11 } }, tickfont: { color: tickColor, size: 9 }, gridcolor: gridColor, backgroundcolor: "rgba(0,0,0,0)" },
           bgcolor: "rgba(0,0,0,0)",
           camera: { eye: { x: 1.4, y: -1.4, z: 1.0 } },
         },
@@ -100,11 +108,11 @@ export default function SurfacePlot({ dataUrl, title, zTitle, colorscaleKey = "e
     return {
       ...base,
       margin: { l: 52, r: 20, t: 10, b: 48 },
-      xaxis: { title: { text: "φ₁ (°)", font: { color: "#94a3b8", size: 11 } }, tickfont: { color: "#64748b", size: 10 }, gridcolor: "rgba(255,255,255,0.06)", zerolinecolor: "rgba(255,255,255,0.15)" },
-      yaxis: { title: { text: "φ₂ (°)", font: { color: "#94a3b8", size: 11 } }, tickfont: { color: "#64748b", size: 10 }, gridcolor: "rgba(255,255,255,0.06)", zerolinecolor: "rgba(255,255,255,0.15)" },
+      xaxis: { title: { text: "φ₁ (°)", font: { color: axisColor, size: 11 } }, tickfont: { color: tickColor, size: 10 }, gridcolor: gridColor, zerolinecolor: zeroColor },
+      yaxis: { title: { text: "φ₂ (°)", font: { color: axisColor, size: 11 } }, tickfont: { color: tickColor, size: 10 }, gridcolor: gridColor, zerolinecolor: zeroColor },
       uirevision: "2d",
     };
-  }, [viewMode, zTitle]);
+  }, [viewMode, zTitle, isDark]);
 
   if (error) {
     return (
@@ -126,15 +134,15 @@ export default function SurfacePlot({ dataUrl, title, zTitle, colorscaleKey = "e
     <div className="w-full overflow-hidden rounded-2xl flex flex-col" style={{ height }}>
       {/* View toggle */}
       <div className="flex justify-end px-2 pt-1 pb-0 shrink-0">
-        <div className="flex bg-white/5 rounded-lg border border-white/10 overflow-hidden">
+        <div className="flex bg-black/5 dark:bg-white/5 rounded-lg border border-black/10 dark:border-white/10 overflow-hidden">
           {[{ key: "3d", label: "3D" }, { key: "2d", label: "2D" }].map(({ key, label }) => (
             <button
               key={key}
               onClick={() => setViewMode(key)}
               className="px-3 py-0.5 text-[10px] font-semibold transition-all duration-150"
               style={{
-                background: viewMode === key ? "rgba(255,255,255,0.15)" : "transparent",
-                color:      viewMode === key ? "white" : "#475569",
+                background: viewMode === key ? (isDark ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.08)") : "transparent",
+                color:      viewMode === key ? (isDark ? "white" : "#0f172a") : "#475569",
               }}
             >
               {label}

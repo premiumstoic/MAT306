@@ -3,7 +3,7 @@ import Latex from "./Latex";
 
 export default function NextStepsSection() {
   return (
-    <div className="glass-panel p-6 md:p-8 rounded-2xl relative overflow-hidden mt-8 border border-white/10">
+    <div className="glass-panel p-6 md:p-8 rounded-2xl relative overflow-hidden mt-8 border border-black/10 dark:border-white/10">
       {/* Decorative gradient background */}
       <div className="absolute -top-32 -left-32 w-96 h-96 bg-indigo-500/10 blur-3xl rounded-full pointer-events-none" />
       
@@ -19,7 +19,7 @@ export default function NextStepsSection() {
         </div>
         
         <p className="text-muted-foreground text-base mb-8 max-w-4xl leading-relaxed">
-          Our NAMD simulation uses the <code className="text-xs bg-white/10 px-1 py-0.5 rounded text-foreground">par_all35_ethers-2.prm</code> classical force field. This treats atoms as balls connected by unbreakable springs governed by <Latex>{`$E = \\frac{1}{2}k(x-x_0)^2$`}</Latex>. If we pushed this to 1200K, the thermal energy would stretch the springs infinitely without breaking, simulating a physically impossible &quot;mutant&quot; molecule. 
+          Our NAMD simulation uses the <code className="text-xs bg-black/10 dark:bg-white/10 px-1 py-0.5 rounded text-foreground">par_all35_ethers-2.prm</code> classical force field. This treats atoms as balls connected by unbreakable springs governed by <Latex>{`$E = \\frac{1}{2}k(x-x_0)^2$`}</Latex>. If we pushed this to 1200K, the thermal energy would stretch the springs infinitely without breaking, simulating a physically impossible &quot;mutant&quot; molecule. 
           <br /><br />
           To truly simulate high-temperature thermal cracking (pyrolysis) where bonds shatter and methane/ethane gases are formed, the research world splits into two main camps:
         </p>
@@ -27,7 +27,7 @@ export default function NextStepsSection() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           
           {/* ReaxFF Card */}
-          <div className="bg-white/5 border border-white/5 rounded-2xl p-6 hover:bg-white/10 transition-colors relative group overflow-hidden">
+          <div className="bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 rounded-2xl p-6 hover:bg-black/10 dark:hover:bg-white/10 transition-colors relative group overflow-hidden">
             <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:scale-110 transition-transform duration-500">
               <Beaker className="w-24 h-24" />
             </div>
@@ -36,7 +36,7 @@ export default function NextStepsSection() {
               <div className="w-10 h-10 rounded-lg bg-rose-500/20 flex items-center justify-center">
                 <Beaker className="w-5 h-5 text-rose-400" />
               </div>
-              <h3 className="font-bold text-xl text-rose-100">1. ReaxFF (LAMMPS)</h3>
+              <h3 className="font-bold text-xl text-rose-700 dark:text-rose-100">1. ReaxFF (LAMMPS)</h3>
             </div>
             
             <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
@@ -51,7 +51,7 @@ export default function NextStepsSection() {
           </div>
 
           {/* AIMD Card */}
-          <div className="bg-white/5 border border-white/5 rounded-2xl p-6 hover:bg-white/10 transition-colors relative group overflow-hidden">
+          <div className="bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 rounded-2xl p-6 hover:bg-black/10 dark:hover:bg-white/10 transition-colors relative group overflow-hidden">
             <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:scale-110 transition-transform duration-500">
               <Atom className="w-24 h-24" />
             </div>
@@ -60,7 +60,7 @@ export default function NextStepsSection() {
               <div className="w-10 h-10 rounded-lg bg-cyan-500/20 flex items-center justify-center">
                 <Atom className="w-5 h-5 text-cyan-400" />
               </div>
-              <h3 className="font-bold text-xl text-cyan-100">2. AIMD / QM</h3>
+              <h3 className="font-bold text-xl text-cyan-700 dark:text-cyan-100">2. AIMD / QM</h3>
             </div>
             
             <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
@@ -76,12 +76,12 @@ export default function NextStepsSection() {
           
         </div>
 
-        <div className="mt-6 bg-black/40 border border-white/5 rounded-xl p-5 flex items-start gap-4">
-          <div className="p-2 bg-white/5 rounded-lg shrink-0 mt-1">
+        <div className="mt-6 bg-black/5 dark:bg-black/40 border border-black/5 dark:border-white/5 rounded-xl p-5 flex items-start gap-4">
+          <div className="p-2 bg-black/5 dark:bg-white/5 rounded-lg shrink-0 mt-1">
             <Cpu className="w-5 h-5 text-emerald-400" />
           </div>
           <div>
-            <h4 className="font-semibold text-emerald-100 flex items-center gap-2 mb-1">
+            <h4 className="font-semibold text-emerald-700 dark:text-emerald-100 flex items-center gap-2 mb-1">
               Hardware Reality: i7-13700KF
             </h4>
             <p className="text-sm text-muted-foreground leading-relaxed">

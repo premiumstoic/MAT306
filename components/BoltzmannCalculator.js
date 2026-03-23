@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import Latex from "@/components/Latex";
+import { useTheme } from "@/components/ThemeProvider";
 
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
 
@@ -28,6 +29,7 @@ function fmt(n, digits = 4) {
 export default function BoltzmannCalculator() {
   const [dE, setDE] = useState(10.8);
   const [T, setT] = useState(1000);
+  const { theme } = useTheme();
 
   const RT     = R * T;
   const ratio  = dE / RT;
@@ -40,14 +42,14 @@ export default function BoltzmannCalculator() {
   const Ps = useMemo(() => Ts.map((t) => boltzmann(dE, t)), [dE, Ts]);
 
   return (
-    <div className="glass-panel p-6 rounded-3xl border border-white/10 space-y-6">
+    <div className="glass-panel p-6 rounded-3xl border border-black/10 dark:border-white/10 space-y-6">
       {/* Header */}
       <div className="space-y-1">
         <h3 className="text-2xl font-bold text-emerald-400">Boltzmann Factor Calculator</h3>
         <p className="text-sm text-muted-foreground">
           Explore how temperature controls the probability of crossing an energy barrier.
         </p>
-        <div className="text-center bg-white/5 py-3 rounded-xl border border-white/10">
+        <div className="text-center bg-black/5 dark:bg-white/5 py-3 rounded-xl border border-black/10 dark:border-white/10">
           <Latex>{`$P \\propto e^{-\\Delta E / RT}$`}</Latex>
         </div>
       </div>
@@ -64,8 +66,8 @@ export default function BoltzmannCalculator() {
               onClick={() => setDE(p.dE)}
               className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 border"
               style={{
-                borderColor: Math.abs(dE - p.dE) < 0.01 ? p.color : "rgba(255,255,255,0.1)",
-                background:  Math.abs(dE - p.dE) < 0.01 ? p.color + "20" : "rgba(255,255,255,0.04)",
+                borderColor: Math.abs(dE - p.dE) < 0.01 ? p.color : (theme === "dark" ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"),
+                background:  Math.abs(dE - p.dE) < 0.01 ? p.color + "20" : (theme === "dark" ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.04)"),
                 color:       Math.abs(dE - p.dE) < 0.01 ? p.color : "#94a3b8",
               }}
             >
@@ -80,7 +82,7 @@ export default function BoltzmannCalculator() {
       <div className="grid md:grid-cols-2 gap-6">
         <div className="space-y-2">
           <div className="flex justify-between items-baseline">
-            <label className="text-sm font-semibold text-white">Energy Barrier (ΔE)</label>
+            <label className="text-sm font-semibold text-foreground">Energy Barrier (ΔE)</label>
             <span className="text-emerald-400 font-mono text-sm">{dE.toFixed(1)} kcal/mol</span>
           </div>
           <input
@@ -96,7 +98,7 @@ export default function BoltzmannCalculator() {
 
         <div className="space-y-2">
           <div className="flex justify-between items-baseline">
-            <label className="text-sm font-semibold text-white">Temperature (T)</label>
+            <label className="text-sm font-semibold text-foreground">Temperature (T)</label>
             <span className="text-emerald-400 font-mono text-sm">{T} K</span>
           </div>
           <input
@@ -123,12 +125,12 @@ export default function BoltzmannCalculator() {
             key={label}
             className="rounded-xl p-3 border text-center"
             style={{
-              background: highlight ? "rgba(16,185,129,0.08)" : "rgba(255,255,255,0.04)",
-              borderColor: highlight ? "rgba(16,185,129,0.3)" : "rgba(255,255,255,0.08)",
+              background: highlight ? "rgba(16,185,129,0.08)" : (theme === "dark" ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.04)"),
+              borderColor: highlight ? "rgba(16,185,129,0.3)" : (theme === "dark" ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"),
             }}
           >
             <p className="text-[10px] text-muted-foreground mb-1 leading-tight">{label}</p>
-            <p className="text-base font-bold font-mono" style={{ color: highlight ? "#10b981" : "white" }}>
+            <p className="text-base font-bold font-mono" style={{ color: highlight ? "#10b981" : (theme === "dark" ? "white" : "#0f172a") }}>
               {value}
             </p>
             <p className="text-[10px] text-muted-foreground/60 mt-0.5">{sub}</p>
@@ -137,7 +139,7 @@ export default function BoltzmannCalculator() {
       </div>
 
       {/* Chart */}
-      <div className="rounded-2xl overflow-hidden border border-white/10" style={{ height: 240 }}>
+      <div className="rounded-2xl overflow-hidden border border-black/10 dark:border-white/10" style={{ height: 240 }}>
         <Plot
           data={[
             {
@@ -163,16 +165,16 @@ export default function BoltzmannCalculator() {
             plot_bgcolor: "rgba(0,0,0,0)",
             margin: { l: 56, r: 12, t: 10, b: 42 },
             xaxis: {
-              title: { text: "Temperature (K)", font: { color: "#94a3b8", size: 11 } },
-              tickfont: { color: "#64748b", size: 9 },
-              gridcolor: "rgba(255,255,255,0.06)",
-              zerolinecolor: "rgba(255,255,255,0.1)",
+              title: { text: "Temperature (K)", font: { color: theme === "dark" ? "#94a3b8" : "#64748b", size: 11 } },
+              tickfont: { color: theme === "dark" ? "#64748b" : "#94a3b8", size: 9 },
+              gridcolor: theme === "dark" ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)",
+              zerolinecolor: theme === "dark" ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)",
             },
             yaxis: {
-              title: { text: "Boltzmann Factor", font: { color: "#94a3b8", size: 11 } },
-              tickfont: { color: "#64748b", size: 9 },
-              gridcolor: "rgba(255,255,255,0.06)",
-              zerolinecolor: "rgba(255,255,255,0.1)",
+              title: { text: "Boltzmann Factor", font: { color: theme === "dark" ? "#94a3b8" : "#64748b", size: 11 } },
+              tickfont: { color: theme === "dark" ? "#64748b" : "#94a3b8", size: 9 },
+              gridcolor: theme === "dark" ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)",
+              zerolinecolor: theme === "dark" ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)",
               type: "log",
             },
             font: { family: "Inter, system-ui, sans-serif" },

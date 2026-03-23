@@ -65,7 +65,7 @@ export default function Dashboard() {
               className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 ${
                 currentTemp === temp
                   ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-105"
-                  : "bg-secondary text-secondary-foreground hover:bg-secondary/80 hover:scale-105 border border-white/5"
+                  : "bg-secondary text-secondary-foreground hover:bg-secondary/80 hover:scale-105 border border-black/5 dark:border-white/5"
               }`}
             >
               {temp} K
@@ -89,42 +89,42 @@ export default function Dashboard() {
               </h3>
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-white/5 p-4 rounded-xl border border-white/5 hover:bg-white/10 transition-colors">
+                  <div className="bg-black/5 dark:bg-white/5 p-4 rounded-xl border border-black/5 dark:border-white/5 hover:bg-black/10 dark:hover:bg-white/10 transition-colors">
                     <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider font-semibold">Temperature</p>
                     <p className="text-2xl font-black">{currentTemp} K</p>
                   </div>
-                  <div className="bg-white/5 p-4 rounded-xl border border-white/5 hover:bg-white/10 transition-colors">
+                  <div className="bg-black/5 dark:bg-white/5 p-4 rounded-xl border border-black/5 dark:border-white/5 hover:bg-black/10 dark:hover:bg-white/10 transition-colors">
                     <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider font-semibold">Sim Time</p>
                     <p className="text-2xl font-black">{simData.summary.simulation_time_ns} ns</p>
                   </div>
                 </div>
                 
-                <h4 className="text-sm font-semibold text-muted-foreground pt-4 border-t border-white/10 mb-2">Conformational Populations</h4>
+                <h4 className="text-sm font-semibold text-muted-foreground pt-4 border-t border-black/10 dark:border-white/10 mb-2">Conformational Populations</h4>
                 <div className="space-y-3">
                   <div>
                     <div className="flex justify-between text-sm mb-1">
-                      <span className="text-emerald-400 font-medium tracking-wide">Trans <span className="text-white/40">~180°</span></span>
+                      <span className="text-emerald-400 font-medium tracking-wide">Trans <span className="text-muted-foreground">~180°</span></span>
                       <span className="font-mono">{simData.summary.trans_pct}%</span>
                     </div>
-                    <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                    <div className="h-2 bg-black/10 dark:bg-white/10 rounded-full overflow-hidden">
                       <div className="h-full bg-emerald-500 rounded-full transition-all duration-1000 ease-out" style={{ width: `${simData.summary.trans_pct}%` }} />
                     </div>
                   </div>
                   <div>
                     <div className="flex justify-between text-sm mb-1">
-                      <span className="text-amber-400 font-medium tracking-wide">Gauche<sup className="-top-1 text-xs">−</sup> <span className="text-white/40">~60°</span></span>
+                      <span className="text-amber-400 font-medium tracking-wide">Gauche<sup className="-top-1 text-xs">−</sup> <span className="text-muted-foreground">~60°</span></span>
                       <span className="font-mono">{simData.summary.gauche_minus_pct}%</span>
                     </div>
-                    <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                    <div className="h-2 bg-black/10 dark:bg-white/10 rounded-full overflow-hidden">
                       <div className="h-full bg-amber-500 rounded-full transition-all duration-1000 ease-out" style={{ width: `${simData.summary.gauche_minus_pct}%` }} />
                     </div>
                   </div>
                   <div>
                     <div className="flex justify-between text-sm mb-1">
-                      <span className="text-indigo-400 font-medium tracking-wide">Gauche<sup className="-top-1 text-xs">+</sup> <span className="text-white/40">~300°</span></span>
+                      <span className="text-indigo-400 font-medium tracking-wide">Gauche<sup className="-top-1 text-xs">+</sup> <span className="text-muted-foreground">~300°</span></span>
                       <span className="font-mono">{simData.summary.gauche_plus_pct}%</span>
                     </div>
-                    <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                    <div className="h-2 bg-black/10 dark:bg-white/10 rounded-full overflow-hidden">
                       <div className="h-full bg-indigo-500 rounded-full transition-all duration-1000 ease-out" style={{ width: `${simData.summary.gauche_plus_pct}%` }} />
                     </div>
                   </div>
@@ -150,7 +150,7 @@ export default function Dashboard() {
               <p>
                 However, our simulation uses a classical force field that ignores electrons. It treats bonds as indestructible springs governed by a simple harmonic oscillator:
               </p>
-              <div className="bg-black/30 p-4 rounded-lg border border-white/5 font-mono text-center text-base text-rose-300">
+              <div className="bg-black/5 dark:bg-black/30 p-4 rounded-lg border border-black/5 dark:border-white/5 font-mono text-center text-base text-rose-500 dark:text-rose-300">
                 <Latex>{`$E = \\frac{1}{2}k(x-x_0)^2$`}</Latex>
               </div>
               <p>
@@ -164,7 +164,7 @@ export default function Dashboard() {
             <div className="glass-panel p-6 rounded-2xl h-[400px]">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="font-bold text-lg">Free Energy Profile & Probability</h3>
-                <span className="text-xs bg-white/10 px-2 py-1 rounded-md">Boltzmann Inversion</span>
+                <span className="text-xs bg-black/10 dark:bg-white/10 px-2 py-1 rounded-md">Boltzmann Inversion</span>
               </div>
               <EnergyChart freeEnergy={simData.freeEnergy} histogram={simData.histogram} />
             </div>
@@ -172,7 +172,7 @@ export default function Dashboard() {
             <div className="glass-panel p-6 rounded-2xl h-[400px]">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="font-bold text-lg">Dihedral Trajectory (100 ns)</h3>
-                <span className="text-xs bg-white/10 px-2 py-1 rounded-md">Time series</span>
+                <span className="text-xs bg-black/10 dark:bg-white/10 px-2 py-1 rounded-md">Time series</span>
               </div>
               <TrajectoryChart trajectory={simData.trajectory} temp={currentTemp} />
             </div>

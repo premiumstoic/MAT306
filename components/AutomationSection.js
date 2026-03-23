@@ -20,18 +20,18 @@ export default function AutomationSection() {
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white/5 border border-white/5 rounded-xl p-5 hover:bg-white/10 transition-colors">
+          <div className="bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 rounded-xl p-5 hover:bg-black/10 dark:hover:bg-white/10 transition-colors">
             <div className="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center mb-4">
               <Layers className="w-5 h-5 text-emerald-400" />
             </div>
             <h3 className="font-semibold text-foreground mb-2">Dynamic Job Queue</h3>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              We used PowerShell's <code className="text-xs text-foreground bg-black/30 px-1 py-0.5 rounded">System.Collections.ArrayList</code> to maintain a queue of pending NAMD jobs. The script uses <code className="text-xs text-foreground bg-black/30 px-1 py-0.5 rounded">Start-Process</code> to launch simulations in the background, keeping track of exactly 
+              We used PowerShell's <code className="text-xs text-foreground bg-black/10 dark:bg-black/30 px-1 py-0.5 rounded">System.Collections.ArrayList</code> to maintain a queue of pending NAMD jobs. The script uses <code className="text-xs text-foreground bg-black/10 dark:bg-black/30 px-1 py-0.5 rounded">Start-Process</code> to launch simulations in the background, keeping track of exactly 
               <code className="text-xs text-foreground bg-black/30 px-1 py-0.5 rounded ml-1">MaxParallelJobs</code> running concurrently to maximize CPU utilization without thrashing.
             </p>
           </div>
 
-          <div className="bg-white/5 border border-white/5 rounded-xl p-5 hover:bg-white/10 transition-colors">
+          <div className="bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 rounded-xl p-5 hover:bg-black/10 dark:hover:bg-white/10 transition-colors">
             <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
               <Zap className="w-5 h-5 text-primary" />
             </div>
@@ -42,7 +42,7 @@ export default function AutomationSection() {
             </p>
           </div>
 
-          <div className="bg-white/5 border border-white/5 rounded-xl p-5 hover:bg-white/10 transition-colors">
+          <div className="bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 rounded-xl p-5 hover:bg-black/10 dark:hover:bg-white/10 transition-colors">
             <div className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center mb-4">
               <Activity className="w-5 h-5 text-amber-400" />
             </div>
