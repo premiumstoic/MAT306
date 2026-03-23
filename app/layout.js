@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import "katex/dist/katex.min.css";
+import TopNav from "@/components/TopNav";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Butane Dynamics Showcase",
-  description: "An interactive visualization of molecular dynamics and statistical thermodynamics, focusing on the dihedral angle of butane.",
+  title: "MAT 306 — Computational Techniques",
+  description: "Interactive molecular dynamics visualizations for MAT 306.",
 };
 
 export default function RootLayout({ children }) {
@@ -23,7 +24,11 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen selection:bg-primary/30 selection:text-primary-foreground`}
       >
-        {children}
+        <TopNav />
+        {/* pt-14 offsets the fixed nav bar height */}
+        <div className="pt-14">
+          {children}
+        </div>
       </body>
     </html>
   );

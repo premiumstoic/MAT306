@@ -1,0 +1,20 @@
+REMARK original generated coordinate pdb file
+ATOM      1  C1  CHEXA   1      -0.625  -0.174   1.286  1.00  0.00      O1   C
+ATOM      2  H1A CHEXA   1      -1.205   0.745   1.374  1.00  0.00      O1   H
+ATOM      3  H1B CHEXA   1      -0.785  -0.791   2.170  1.00  0.00      O1   H
+ATOM      4  C2  CHEXA   1       0.822   0.162   1.171  1.00  0.00      O1   C
+ATOM      5  H2A CHEXA   1       1.408  -0.757   1.156  1.00  0.00      O1   H
+ATOM      6  H2B CHEXA   1       1.122   0.771   2.024  1.00  0.00      O1   H
+ATOM      7  C3  CHEXA   1       1.097   0.924  -0.080  1.00  0.00      O1   C
+ATOM      8  H3A CHEXA   1       2.170   1.093  -0.174  1.00  0.00      O1   H
+ATOM      9  H3B CHEXA   1       0.580   1.883  -0.043  1.00  0.00      O1   H
+ATOM     10  C4  CHEXA   1       0.625   0.172  -1.278  1.00  0.00      O1   C
+ATOM     11  H4A CHEXA   1       1.192  -0.754  -1.372  1.00  0.00      O1   H
+ATOM     12  H4B CHEXA   1       0.773   0.781  -2.170  1.00  0.00      O1   H
+ATOM     13  C5  CHEXA   1      -0.823  -0.162  -1.162  1.00  0.00      O1   C
+ATOM     14  H5A CHEXA   1      -1.124  -0.771  -2.015  1.00  0.00      O1   H
+ATOM     15  H5B CHEXA   1      -1.408   0.757  -1.147  1.00  0.00      O1   H
+ATOM     16  C6  CHEXA   1      -1.097  -0.924   0.089  1.00  0.00      O1   C
+ATOM     17  H6A CHEXA   1      -0.580  -1.883   0.051  1.00  0.00      O1   H
+ATOM     18  H6B CHEXA   1      -2.170  -1.092   0.184  1.00  0.00      O1   H
+END

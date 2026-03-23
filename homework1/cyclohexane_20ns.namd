@@ -1,0 +1,57 @@
+# NAMD Config file for Cyclohexane
+# Run: 1000 K, 20,000,000 MD steps (20 ns at 1 fs/step)
+
+# input
+coordinates             /Users/mchalil/Documents/MAT306/homework1/cyclohexane.pdb
+structure               /Users/mchalil/Documents/MAT306/homework1/cyclohexane.psf
+parameters              /Users/mchalil/Documents/MAT306/homework1/par_all35_ethers-2.prm
+paratypecharmm          on
+
+# output
+set output              /Users/mchalil/Documents/MAT306/homework1/cyclohexane_1000K_2e7
+outputname              $output
+dcdfile                 ${output}.dcd
+xstFile                 ${output}.xst
+dcdfreq                 1000
+xstFreq                 1000
+
+binaryoutput            no
+binaryrestart           no
+outputEnergies          1000
+restartfreq             1000
+
+fixedAtoms              off
+
+# Basic dynamics
+exclude                 scaled1-4
+1-4scaling              1
+COMmotion               no
+dielectric              1.0
+
+# Simulation space partitioning
+switching               on
+switchdist              9
+cutoff                  10
+pairlistdist            12
+
+# Multiple timestepping
+firsttimestep           0
+timestep                1
+stepspercycle           20
+nonbondedFreq           2
+fullElectFrequency      4
+
+# Temperature control (Langevin Dynamics recommended for single molecules in vacuum to maintain T)
+langevin                on
+langevinTemp            1000
+langevinDamping         1     ;# Damping coefficient (gamma) of 1/ps
+langevinHydrogen        off   ;# Don't couple bath to hydrogens
+
+# Temperature control (measure in K)
+set temperature         1000  ;# run temperature (K)
+temperature             $temperature;  # initial temperature
+
+# Scripting
+minimize            1000
+reinitvels          $temperature
+run                 20000000   ;# 2e7 steps = 20 ns

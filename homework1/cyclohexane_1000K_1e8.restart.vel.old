@@ -1,0 +1,20 @@
+REMARK  RESTART VELOCITIES WRITTEN BY NAMD AT TIMESTEP 100000000
+ATOM      1  C1  CHEXA   1       2.900  13.740  -9.194  1.00  0.00      O1   C 
+ATOM      2  H1A CHEXA   1     -53.818  32.938 -19.353  1.00  0.00      O1   H 
+ATOM      3  H1B CHEXA   1     -30.368 -13.888 -31.148  1.00  0.00      O1   H 
+ATOM      4  C2  CHEXA   1      -6.806 -15.136   8.330  1.00  0.00      O1   C 
+ATOM      5  H2A CHEXA   1      31.011   2.381 -17.956  1.00  0.00      O1   H 
+ATOM      6  H2B CHEXA   1      10.653 -36.923  16.016  1.00  0.00      O1   H 
+ATOM      7  C3  CHEXA   1      13.031  -1.304  -0.039  1.00  0.00      O1   C 
+ATOM      8  H3A CHEXA   1     -25.758 -12.679  17.167  1.00  0.00      O1   H 
+ATOM      9  H3B CHEXA   1      34.624 -20.701   7.522  1.00  0.00      O1   H 
+ATOM     10  C4  CHEXA   1      -2.063   9.954   6.502  1.00  0.00      O1   C 
+ATOM     11  H4A CHEXA   1      52.335 -30.953  -0.187  1.00  0.00      O1   H 
+ATOM     12  H4B CHEXA   1      -5.651  36.091  51.019  1.00  0.00      O1   H 
+ATOM     13  C5  CHEXA   1       5.987   5.613   7.014  1.00  0.00      O1   C 
+ATOM     14  H5A CHEXA   1      54.210 -36.848   1.709  1.00  0.00      O1   H 
+ATOM     15  H5B CHEXA   1     -45.170   6.471   8.600  1.00  0.00      O1   H 
+ATOM     16  C6  CHEXA   1      -3.137  -1.224  -2.156  1.00  0.00      O1   C 
+ATOM     17  H6A CHEXA   1      27.650  74.571 -33.787  1.00  0.00      O1   H 
+ATOM     18  H6B CHEXA   1      38.494 -20.556  15.093  1.00  0.00      O1   H 
+END
