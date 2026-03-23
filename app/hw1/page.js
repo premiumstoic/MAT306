@@ -3,11 +3,19 @@
 import { useState } from "react";
 import Image from "next/image";
 import Latex from "@/components/Latex";
-import MolecularViewer from "@/components/MolecularViewer";
+import MolecularViewer, { CONFORMATIONS } from "@/components/MolecularViewer";
 import InteractiveEnergyMap from "@/components/InteractiveEnergyMap";
 import SurfacePlot from "@/components/SurfacePlot";
 import ReactionCoordinateChart from "@/components/ReactionCoordinateChart";
+import BoltzmannCalculator from "@/components/BoltzmannCalculator";
 import PageTOC from "@/components/PageTOC";
+
+const ENERGY_ROWS = [
+  { key: "chair",      label: "Chair",       feature: "Global Minimum",          energy: "0.0 kcal/mol"  },
+  { key: "twist_boat", label: "Twist-Boat",  feature: "Local Minimum",           energy: "~ 5.5 kcal/mol" },
+  { key: "boat",       label: "Boat",        feature: "Saddle Point / Transition", energy: "~ 7.5 kcal/mol" },
+  { key: "half_chair", label: "Half-Chair",  feature: "Primary Energy Barrier",  energy: "~ 10.5 kcal/mol" },
+];
 
 export default function Homework1() {
   const [activeConformation, setActiveConformation] = useState("chair");
@@ -58,7 +66,7 @@ export default function Homework1() {
           </div>
           
           <div className="glass-panel p-4 rounded-3xl border border-white/10 shadow-2xl">
-            <ReactionCoordinateChart />
+            <ReactionCoordinateChart onSelect={setActiveConformation} />
           </div>
         </div>
       </section>
@@ -163,30 +171,37 @@ export default function Homework1() {
                 </tr>
               </thead>
               <tbody className="text-muted-foreground">
-                <tr className="border-b border-white/5 hover:bg-white/5 transition-colors">
-                  <td className="py-4 font-bold text-white">Chair</td>
-                  <td className="py-4">Global Minimum</td>
-                  <td className="py-4 font-mono">0.0 kcal/mol</td>
-                </tr>
-                <tr className="border-b border-white/5 hover:bg-white/5 transition-colors">
-                  <td className="py-4 font-bold text-white">Twist-Boat</td>
-                  <td className="py-4">Local Minimum</td>
-                  <td className="py-4 font-mono">~ 5.5 kcal/mol</td>
-                </tr>
-                <tr className="border-b border-white/5 hover:bg-white/5 transition-colors">
-                  <td className="py-4 font-bold text-white">Boat</td>
-                  <td className="py-4">Saddle Point / Transition</td>
-                  <td className="py-4 font-mono">~ 7.5 kcal/mol</td>
-                </tr>
-                <tr className="hover:bg-white/5 transition-colors">
-                  <td className="py-4 font-bold text-white">Half-Chair</td>
-                  <td className="py-4">Primary Energy Barrier</td>
-                  <td className="py-4 font-mono">~ 10.5 kcal/mol</td>
-                </tr>
+                {ENERGY_ROWS.map((row, i) => {
+                  const isActive = activeConformation === row.key;
+                  const color = CONFORMATIONS[row.key]?.color;
+                  return (
+                    <tr
+                      key={row.key}
+                      className={`transition-colors duration-300 ${i < ENERGY_ROWS.length - 1 ? "border-b" : ""} ${isActive ? "" : "border-white/5 hover:bg-white/5"}`}
+                      style={isActive ? { borderColor: color + "30", background: color + "12" } : {}}
+                    >
+                      <td className="py-4 font-bold transition-colors duration-300" style={{ color: isActive ? color : "white" }}>
+                        {isActive && <span className="inline-block w-1.5 h-1.5 rounded-full mr-2 mb-0.5" style={{ background: color }} />}
+                        {row.label}
+                      </td>
+                      <td className="py-4">{row.feature}</td>
+                      <td className="py-4 font-mono" style={{ color: isActive ? color : undefined }}>{row.energy}</td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
         </div>
+      </section>
+
+      {/* Boltzmann Calculator */}
+      <section id="section-boltzmann" className="space-y-4">
+        <div className="border-b border-white/10 pb-4">
+          <h2 className="text-3xl font-bold">Boltzmann Factor Explorer</h2>
+          <p className="text-muted-foreground mt-2">Adjust temperature and energy barrier to see how thermally accessible each conformation is.</p>
+        </div>
+        <BoltzmannCalculator />
       </section>
 
       {/* Interactive Energy-to-Structure Explorer */}
@@ -194,7 +209,12 @@ export default function Homework1() {
         <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-white/10 pb-4 gap-4">
           <div>
             <h2 className="text-3xl font-bold">Interactive Explorer</h2>
-            <p className="text-muted-foreground mt-2">Click a node on the energy surface to view the 3D conformation</p>
+            <p className="text-muted-foreground mt-2">
+              Click a node on the energy surface to view the 3D conformation
+              <span className={`ml-2 text-xs font-semibold px-2 py-0.5 rounded-full ${simLength === "20ns" ? "bg-orange-500/20 text-orange-400" : "bg-emerald-500/20 text-emerald-400"}`}>
+                {simLength.replace("ns", " ns")}
+              </span>
+            </p>
           </div>
           <div className="flex gap-2 flex-wrap">
             {["chair", "twist_boat", "boat", "half_chair"].map((key) => (
@@ -218,6 +238,7 @@ export default function Homework1() {
             <InteractiveEnergyMap
               activeConformation={activeConformation}
               onSelect={setActiveConformation}
+              dataUrl={`/homework1/fes_3d_data_${simLength}.json`}
             />
           </div>
           <div className="glass-panel rounded-3xl overflow-hidden border border-white/10">

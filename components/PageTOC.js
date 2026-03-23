@@ -6,6 +6,7 @@ const SECTIONS = [
   { id: "section-intro", label: "Aim & Intro", short: "1" },
   { id: "section-methods", label: "Methods", short: "2" },
   { id: "section-results", label: "Results", short: "3" },
+  { id: "section-boltzmann", label: "Boltzmann", short: "β" },
   { id: "section-explorer", label: "Explorer", short: "↗" },
   { id: "section-conclusions", label: "Conclusions", short: "4" },
 ];

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
-import MolecularViewer, { CONFORMATIONS } from "./MolecularViewer";
+import { CONFORMATIONS } from "./MolecularViewer";
 
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
 
@@ -25,24 +25,40 @@ const UNIQUE_STATES = [
   { name: "Boat", key: "boat", y: 7.5 },
 ];
 
-export default function ReactionCoordinateChart() {
+const STATE_DESCRIPTORS = {
+  chair:      "Global Minimum",
+  half_chair: "Energy Barrier",
+  twist_boat: "Local Minimum",
+  boat:       "Saddle Point",
+};
+
+export default function ReactionCoordinateChart({ onSelect }) {
   const xs = STEPS.map((s) => s.x);
   const ys = STEPS.map((s) => s.y);
   const labels = STEPS.map((s) => s.name);
   const colors = STEPS.map((s) => CONFORMATIONS[s.key].color);
 
   const [selected, setSelected] = useState(null);
-  const [playIndex, setPlayIndex] = useState(null); // which step index is highlighted during playback
+  const [playIndex, setPlayIndex] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [speed, setSpeed] = useState("normal");
   const intervalRef = useRef(null);
 
-  const select = (state) =>
-    setSelected((prev) => (prev && prev.key === state.key ? null : state));
+  const SPEEDS = { slow: 2000, normal: 1200, fast: 500 };
+
+  const select = (state) => {
+    setSelected((prev) => {
+      const next = prev && prev.key === state.key ? null : state;
+      onSelect?.(next ? next.key : "chair");
+      return next;
+    });
+  };
 
   const startPlay = () => {
     setIsPlaying(true);
     setPlayIndex(0);
     setSelected(STEPS[0]);
+    onSelect?.(STEPS[0].key);
   };
 
   const stopPlay = () => {
@@ -58,19 +74,19 @@ export default function ReactionCoordinateChart() {
       setPlayIndex((prev) => {
         const next = prev + 1;
         if (next >= STEPS.length) {
-          // End of pathway — stop
           setIsPlaying(false);
           setPlayIndex(null);
           clearInterval(intervalRef.current);
           return prev;
         }
         setSelected(STEPS[next]);
+        onSelect?.(STEPS[next].key);
         return next;
       });
-    }, 1200); // 1.2s per step
+    }, SPEEDS[speed]);
 
     return () => clearInterval(intervalRef.current);
-  }, [isPlaying]);
+  }, [isPlaying, speed]);
 
   // Active step: during playback use playIndex; otherwise use selected
   const activeStep = isPlaying && playIndex !== null ? STEPS[playIndex] : null;
@@ -157,26 +173,32 @@ export default function ReactionCoordinateChart() {
         </div>
 
         {/* Side panel */}
-        <div className="w-44 flex-shrink-0 flex flex-col">
+        <div className="w-40 flex-shrink-0 flex flex-col">
           {displayState ? (
             <div
-              className="rounded-2xl border bg-black/60 backdrop-blur-xl p-3 flex flex-col items-center gap-2 h-full transition-all duration-300"
+              className="rounded-2xl border bg-black/60 backdrop-blur-xl p-4 flex flex-col items-center justify-center gap-3 h-full transition-all duration-300"
               style={{ borderColor: CONFORMATIONS[displayState.key].color + "50" }}
             >
-              <div className="w-full flex-1 min-h-[120px] rounded-xl overflow-hidden bg-white/5 border border-white/5 relative">
-                <MolecularViewer activeConformation={displayState.key} />
+              <div
+                className="w-12 h-12 rounded-full flex items-center justify-center text-2xl shadow-lg"
+                style={{ background: CONFORMATIONS[displayState.key].color + "20", boxShadow: `0 0 24px ${CONFORMATIONS[displayState.key].color}40` }}
+              >
+                <div className="w-5 h-5 rounded-full" style={{ background: CONFORMATIONS[displayState.key].color }} />
               </div>
-              <div className="text-center">
+              <div className="text-center space-y-1">
                 <div className="font-bold text-sm" style={{ color: CONFORMATIONS[displayState.key].color }}>
                   {displayState.name}
                 </div>
-                <div className="font-mono text-xs text-slate-400 mt-0.5">
-                  ΔG = <span className="text-emerald-400">{displayState.y}</span> kcal/mol
+                <div className="text-[10px] text-slate-500 uppercase tracking-wider">
+                  {STATE_DESCRIPTORS[displayState.key]}
+                </div>
+                <div className="font-mono text-xs text-slate-400 mt-1 bg-white/5 px-2 py-1 rounded-lg">
+                  ΔG = <span style={{ color: CONFORMATIONS[displayState.key].color }}>{displayState.y}</span> kcal/mol
                 </div>
               </div>
               {!isPlaying && (
                 <button
-                  onClick={() => setSelected(null)}
+                  onClick={() => { setSelected(null); onSelect?.("chair"); }}
                   className="text-[10px] text-slate-500 hover:text-white transition-colors px-2 py-0.5 rounded border border-white/10 hover:border-white/30"
                 >
                   ✕ close
@@ -211,6 +233,23 @@ export default function ReactionCoordinateChart() {
             ■ Stop
           </button>
         )}
+
+        {/* Speed selector */}
+        <div className="flex bg-white/5 rounded-full border border-white/10 overflow-hidden">
+          {["slow", "normal", "fast"].map((s) => (
+            <button
+              key={s}
+              onClick={() => setSpeed(s)}
+              className="px-2.5 py-1 text-[10px] font-semibold capitalize transition-all duration-150"
+              style={{
+                background: speed === s ? "rgba(255,255,255,0.12)" : "transparent",
+                color:      speed === s ? "white" : "#475569",
+              }}
+            >
+              {s === "slow" ? "0.5×" : s === "normal" ? "1×" : "2×"}
+            </button>
+          ))}
+        </div>
 
         <span className="text-slate-600 text-xs">|</span>
 
